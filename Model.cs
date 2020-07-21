@@ -1,10 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using Microsoft.Data.Sqlite;
+
 namespace ConsoleApp.SQLite
 {
-    
-
     public class Blog
     {
         public int BlogId { get; set; }

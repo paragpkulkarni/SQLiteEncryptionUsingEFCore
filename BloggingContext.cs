@@ -1,49 +1,45 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsoleApp.SQLite
 {
     public class BloggingContext : DbContext
     {
+        public const string DEFAULTDBFILE = "blogging.db";
+
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 
+        private readonly string dbFile = DEFAULTDBFILE;
         private SqliteConnection connection;
 
-        public BloggingContext()
+        public BloggingContext() { }
+
+        public BloggingContext(string databaseFile)
         {
+            if(!string.IsNullOrEmpty(databaseFile)) dbFile = databaseFile;
         }
 
         public BloggingContext(SqliteConnection sqliteConnection)
         {
+            if (!string.IsNullOrEmpty(sqliteConnection?.DataSource)) dbFile = sqliteConnection.DataSource;
             connection = sqliteConnection;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            connection = InitializeSQLiteConnection();
+            connection ??= InitializeSQLiteConnection(dbFile);
             optionsBuilder.UseSqlite(connection);
         }
 
-        // SQLCipher Encryption is applied to database using DBBrowser for SQLite.
-        // DBBrowser for SQLite is free and open source tool to edit the SQLite files. 
-        private static SqliteConnection InitializeSQLiteConnection()
+        private static SqliteConnection InitializeSQLiteConnection(string databaseFile)
         {
-            var connection = new SqliteConnection("Data Source=blogging.db");
-            connection.Open();
-            var password = "Test123";
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT quote($password);";
-            command.Parameters.AddWithValue("$password", password);
-            var quotedPassword = (string)command.ExecuteScalar();
-
-            command.CommandText = "PRAGMA key = " + quotedPassword;
-            command.Parameters.Clear();
-            var result = command.ExecuteNonQuery();
-            return connection;
+            var connectionString = new SqliteConnectionStringBuilder
+            {
+                DataSource = databaseFile,
+                Password = "Test123"// PRAGMA key is being sent from EF Core directly after opening the connection
+            };
+            return new SqliteConnection(connectionString.ToString());
         }
     }
 }
