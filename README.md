@@ -1,21 +1,18 @@
 # SQLiteEncryptionUsingEFCore
-This is real life example which demostrates how to use SQLite encrypted database using Entity Framework Core (EFCore). 
-Database is using SQLCipher encryption. Encryption is applied to the database using DBBrowser for SQLite. DBBrowser for SQLite is free and open source tool to edit the SQLite files. 
 
-Steps for using Encrypted SQLite database in your .Net application with EFCore. This example is using .Net Core 2.0 with EFCore 2.0
+This is a real life example which demostrates how to use SQLite encrypted databases using Entity Framework Core (EFCore). 
 
+## Tipp for creating/exploring SQLite databases with encryption manually
 
-1  Add the reference of Microsoft.EntityFrameworkCore.Design in your project.
+The database is using SQLCipher encryption. To create/explore SQLite databases with encrytion manually, you may use the open source **DB Browser for SQLite**, which you can find here https://sqlitebrowser.org/ or on GitHub https://github.com/sqlitebrowser/sqlitebrowser .
 
-2  Add the reference of Microsoft.EntityFrameworkCore.Sqlite.Core. This is really important step. Don't add the reference of Microsoft.EntityFrameworkCore.Sqlite. Otherwise it will not work.
+## Steps for using encrypted SQLite database in your .Net application with EFCore
 
-3  Add the reference of SQLitePCLRaw.bundle_sqlcipher. For encryption it is required.
+This example is using **.Net Core 3.1** with **EFCore 3.1.6** and **SQLCipher 2.0.3**:
 
-4  Add the following line 
-   <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.8" ExcludeAssets="All" />
-   ExcludeAssets="All" is important otherwise it will not work. For details refer to following link
-  
-     http://www.bricelam.net/2016/06/13/sqlite-encryption.html
-
-
-
+1. Add a NuGET reference to `Microsoft.EntityFrameworkCore` in your project
+1. Add a NuGET reference to `Microsoft.EntityFrameworkCore.Design` in your project
+1. Add a NuGET reference to `Microsoft.EntityFrameworkCore.Sqlite.Core` in your project **This is a really important step: DO NOT add a reference to _Microsoft.EntityFrameworkCore.Sqlite_, otherwise it will not work!**
+1. Add a NuGET reference to `SQLitePCLRaw.bundle_e_sqlcipher`
+1. Create a connection object (`SqliteConnection`), defining the database access password in the connection string (you can use `SqliteConnectionStringBuilder`) you give to the constructor
+1. Give _the connection object_ to the `UseSqlite` method, when configuring the database context
