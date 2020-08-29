@@ -1,5 +1,7 @@
 # SQLiteEncryptionUsingEFCore
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab02b316a4d34167bacca95fbecb2ebf)](https://app.codacy.com/manual/paragpkulkarni/SQLiteEncryptionUsingEFCore?utm_source=github.com&utm_medium=referral&utm_content=paragpkulkarni/SQLiteEncryptionUsingEFCore&utm_campaign=Badge_Grade_Dashboard)
+
 This is a real life example which demostrates how to use SQLite encrypted databases using Entity Framework Core (EFCore). 
 
 ## Tipp for creating/exploring SQLite databases with encryption manually
